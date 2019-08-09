@@ -27,17 +27,18 @@ class MongoModels {
     }
 
 
-    static connect(uri, options, callback) {
+    static connect(connection, options, callback) {
 
-        Mongodb.MongoClient.connect(uri, options, (err, db) => {
+        Mongodb.MongoClient.connect(connection.uri, options, (err, db) => {
 
             if (err) {
                 return callback(err);
             }
 
-            MongoModels.db = db;
+            var selectedDb = db.db(connection.db);
+            MongoModels.db = selectedDb;
 
-            callback(null, db);
+            callback(null, selectedDb);
         });
     }
 
